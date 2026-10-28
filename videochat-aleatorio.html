@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0a0e14" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="data:," />
+    <title>OneTV — Videochat aleatorio para conocer gente de todo el mundo</title>
+    <meta name="description" content="OneTV es un videochat aleatorio gratuito: pulsa Empezar y te empareja al azar con personas de diferentes países por cámara, audio y chat de texto. Sin registro, funciona en celular, iPhone y PC." />
+    <meta name="keywords" content="OneTV, videochat aleatorio, chat aleatorio, conocer gente, videochat con desconocidos, chat por cámara, videochat gratis, chat de países" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="OneTV" />
+    <meta name="google-adsense-account" content="ca-pub-1021956217360765" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1021956217360765" crossorigin="anonymous"></script>
+    <meta name="application-name" content="OneTV" />
+    <meta name="apple-mobile-web-app-title" content="OneTV" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="OneTV" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content="OneTV — Videochat aleatorio" />
+    <meta property="og:description" content="Conoce gente nueva de todo el mundo: videochat aleatorio por cámara, audio y texto, con filtro por país. Gratis y sin registro, en celular, iPhone y PC." />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="OneTV — Videochat aleatorio" />
+    <meta name="twitter:description" content="Conoce gente nueva de todo el mundo: videochat aleatorio por cámara, audio y texto, con filtro por país. Gratis y sin registro." />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "OneTV",
+      "description": "Videochat aleatorio gratuito para conocer gente de diferentes países por cámara, audio y chat de texto, con filtro por país.",
+      "applicationCategory": "CommunicationApplication",
+      "operatingSystem": "Any (navegador web: celular, iPhone y PC)",
+      "inLanguage": "es",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #eef1f5;
+        --panel: #ffffff;
+        --panel-2: #f6f8fa;
+        --ink: #131a22;
+        --ink-soft: #4c5a68;
+        --line: #dde3ea;
+        --accent: #2f7bff;
+        --accent-ink: #ffffff;
+        --danger: #e5484d;
+        --ok: #22b573;
+        --stage: #0a0e14;
+        --stage-2: #11161f;
+        --chip: rgba(10, 14, 20, 0.72);
+        --shadow: 0 10px 30px rgba(15, 25, 40, 0.12);
+        --sat: env(safe-area-inset-top, 0px);
+        --sab: env(safe-area-inset-bottom, 0px);
+        --sal: env(safe-area-inset-left, 0px);
+        --sar: env(safe-area-inset-right, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0b0e13;
+          --panel: #141a22;
+          --panel-2: #1a212c;
+          --ink: #eef3f8;
+          --ink-soft: #9fb0c0;
+          --line: #26303d;
+          --accent: #4f8cff;
+          --danger: #f0565c;
+          --ok: #2ecc8a;
+          --stage: #05070a;
+          --stage-2: #0b0f16;
+          --chip: rgba(5, 8, 12, 0.72);
+          --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+      }
+      * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      html { height: 100%; scrollbar-width: thin; scrollbar-color: rgba(120,135,155,.55) transparent; }
+      body::-webkit-scrollbar { width: 6px; }
+      body::-webkit-scrollbar-thumb { background: rgba(120,135,155,.55); border-radius: 999px; }
+      body::-webkit-scrollbar-track { background: transparent; }
+      body {
+        margin: 0;
+        font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        height: 100dvh;
+        height: -webkit-fill-available;
+        min-height: 100dvh;
+        overflow: hidden;
+        overscroll-behavior: none;
+        padding-left: var(--sal);
+        padding-right: var(--sar);
+      }
+      button, select, input { font: inherit; }
+      button { cursor: pointer; touch-action: manipulation; }
+      select, input { font-size: 16px; } /* evita el zoom automático en iPhone */
+
+      /* ---------- Barra superior ---------- */
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: calc(10px + var(--sat)) 14px 10px;
+        background: var(--panel);
+        border-bottom: 1px solid var(--line);
+        z-index: 5;
+        flex: none;
+      }
+      .brand { font-weight: 800; font-size: 1.05rem; letter-spacing: -.02em; white-space: nowrap; }
+      .brand b { color: var(--accent); }
+      .online, .service {
+        display: inline-flex; align-items: center; gap: 7px;
+        font-weight: 700; font-size: .85rem;
+        background: var(--panel-2); border: 1px solid var(--line);
+        padding: 7px 11px; border-radius: 999px; white-space: nowrap;
+      }
+      .service { color: var(--ink-soft); font-size: .8rem; }
+      .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(34,181,115,.5); animation: pulse 2s infinite; flex: none; }
+      .dot.wait { background: #e0a63c; animation: none; box-shadow: none; }
+      .dot.off { background: var(--danger); animation: none; box-shadow: none; }
+      @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(34,181,115,.45)} 70%{box-shadow:0 0 0 8px rgba(34,181,115,0)} 100%{box-shadow:0 0 0 0 rgba(34,181,115,0)} }
+      .topbar .spacer { flex: 1; }
+      .field { display: inline-flex; align-items: center; gap: 7px; font-size: .85rem; font-weight: 600; color: var(--ink-soft); }
+      .field select {
+        appearance: none; -webkit-appearance: none;
+        border: 1px solid var(--line); background-color: var(--panel-2); color: var(--ink);
+        border-radius: 10px; padding: 9px 30px 9px 11px; font-weight: 700; min-height: 42px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 10px center; max-width: 270px;
+      }
+      .retry-btn { border: 1px solid var(--line); background: var(--accent); color: #fff; border-radius: 999px; padding: 8px 13px; font-weight: 800; font-size: .82rem; min-height: 38px; display: none; }
+      .retry-btn.show { display: inline-block; }
+
+      /* ---------- Escenario ---------- */
+      .layout { flex: 1; display: grid; grid-template-columns: minmax(0,1fr) 340px; min-height: 0; }
+      .stage-wrap { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+      .stage { position: relative; flex: 1; background: radial-gradient(120% 120% at 50% 0%, var(--stage-2), var(--stage)); overflow: hidden; min-height: 0; }
+      #remoteVideo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; display: none; z-index: 1; }
+      .stage.connected #remoteVideo, .stage.has-remote #remoteVideo { display: block; }
+      #localVideo {
+        position: absolute; right: 14px; bottom: 14px; width: min(24%, 190px); aspect-ratio: 3/4;
+        object-fit: cover; border-radius: 12px; border: 2px solid rgba(255,255,255,.35); background: #000;
+        transform: scaleX(-1); box-shadow: 0 8px 24px rgba(0,0,0,.5); display: none; z-index: 4;
+      }
+      #localVideo.back { transform: none; }
+      .stage.has-local #localVideo { display: block; }
+      .local-label { position: absolute; right: 14px; bottom: 14px; transform: translateY(calc(-100% - 6px)); z-index: 5; display: none; background: var(--chip); color: #fff; font-size: .72rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; }
+      .stage.has-local .local-label { display: block; }
+      .stage-msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; color: #dbe6f2; gap: 10px; z-index: 3; overflow-y: auto; }
+      .stage-msg h1 { margin: 0; font-size: clamp(1.35rem, 3.4vw, 2.1rem); font-weight: 800; letter-spacing: -.01em; color: #fff; max-width: 22ch; }
+      .stage-msg p { margin: 0; color: #a9bccd; font-size: .97rem; max-width: 46ch; line-height: 1.5; }
+      .stage-msg .rules { font-size: .82rem; color: #7e93a9; max-width: 52ch; }
+      .stage-msg .hint { font-size: .85rem; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); padding: 9px 13px; border-radius: 10px; color: #dbe6f2; }
+      .radar { position: relative; width: 92px; height: 92px; margin-bottom: 6px; flex: none; }
+      .radar::before, .radar::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(96,165,250,.55); animation: radar 1.8s ease-out infinite; }
+      .radar::after { animation-delay: .9s; }
+      .radar .core { position: absolute; inset: 32px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; color: #fff; }
+      @keyframes radar { 0%{transform:scale(.35);opacity:1} 100%{transform:scale(1.15);opacity:0} }
+      .spinner { width: 46px; height: 46px; border-radius: 50%; border: 4px solid rgba(255,255,255,.18); border-top-color: var(--accent); animation: spin .9s linear infinite; margin-bottom: 4px; flex: none; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .partner-chip { position: absolute; top: calc(14px + var(--sat)); left: 14px; z-index: 6; display: none; align-items: center; gap: 9px; background: var(--chip); color: #fff; padding: 8px 14px 8px 10px; border-radius: 999px; font-weight: 700; font-size: .92rem; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); max-width: calc(100% - 150px); }
+      .stage.connected .partner-chip { display: inline-flex; }
+      .partner-chip .flag { font-size: 1.25rem; line-height: 1; }
+      .partner-chip .timer { color: #9fd0ff; font-variant-numeric: tabular-nums; font-weight: 600; }
+      .report-btn { position: absolute; top: calc(14px + var(--sat)); right: 14px; z-index: 6; display: none; border: 1px solid rgba(255,255,255,.25); background: var(--chip); color: #ffb4b8; border-radius: 999px; padding: 10px 13px; font-weight: 700; font-size: .82rem; min-height: 40px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+      .stage.connected .report-btn { display: block; }
+      .tap-play { position: absolute; inset: 0; z-index: 7; display: none; place-items: center; background: rgba(0,0,0,.45); color: #fff; border: none; font-weight: 800; font-size: 1rem; padding: 20px; text-align: center; }
+      .tap-play.show { display: grid; }
+
+      /* ---------- Controles ---------- */
+      .controls { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; padding: 12px 14px calc(12px + var(--sab)); background: var(--panel); border-top: 1px solid var(--line); flex: none; }
+      .btn { border: 1px solid var(--line); background: var(--panel-2); color: var(--ink); border-radius: 12px; padding: 12px 16px; font-weight: 800; font-size: .94rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; transition: transform .08s ease, background .15s ease, opacity .15s; }
+      .btn:active { transform: scale(.97); }
+      .btn:disabled { opacity: .45; cursor: not-allowed; }
+      .btn svg { width: 19px; height: 19px; flex: none; }
+      .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+      .btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+      .btn.toggle.off { background: #3a1518; border-color: #6e2a2f; color: #ffb4b8; }
+      @media (prefers-color-scheme: light) { .btn.toggle.off { background: #fdecec; border-color: #f3c2c4; color: #b4232a; } }
+      .status-text { font-size: .88rem; color: var(--ink-soft); font-weight: 600; margin-left: auto; }
+
+      /* ---------- Publicidad (AdSense) ---------- */
+      .ad-wrap { flex: none; background: var(--panel); border-top: 1px solid var(--line); padding: 5px 14px calc(6px + var(--sab)); display: flex; flex-direction: column; align-items: center; gap: 3px; }
+      .ad-label { font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); font-weight: 700; line-height: 1; }
+      .ad-slot { width: 100%; max-width: 728px; height: 60px; max-height: 60px !important; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+      .ad-slot .adsbygoogle { display: block; width: 100%; height: 60px; max-height: 60px !important; }
+      .ad-slot iframe { max-height: 60px !important; }
+
+      /* ---------- Chat ---------- */
+      .chat { display: flex; flex-direction: column; background: var(--panel); border-left: 1px solid var(--line); min-height: 0; min-width: 0; }
+      .chat-head { padding: 12px 14px; border-bottom: 1px solid var(--line); font-weight: 800; font-size: .95rem; display: flex; align-items: center; gap: 8px; flex: none; }
+      .chat-head .typing { margin-left: auto; font-size: .8rem; font-weight: 600; color: var(--ink-soft); display: none; }
+      .messages { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+      .msg { max-width: 85%; padding: 9px 13px; border-radius: 16px; font-size: .93rem; line-height: 1.45; word-break: break-word; white-space: pre-wrap; }
+      .msg.me { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 5px; }
+      .msg.them { align-self: flex-start; background: var(--panel-2); border: 1px solid var(--line); border-bottom-left-radius: 5px; }
+      .msg.sys { align-self: center; background: transparent; color: var(--ink-soft); font-size: .8rem; font-weight: 600; text-align: center; padding: 2px 8px; }
+      .emoji-row { display: flex; gap: 2px; padding: 6px 10px 0; overflow-x: auto; flex: none; scrollbar-width: none; }
+      .emoji-row::-webkit-scrollbar { display: none; }
+      .emoji-row button { border: none; background: transparent; font-size: 1.2rem; padding: 7px 7px; border-radius: 8px; min-width: 40px; min-height: 40px; }
+      .chat-form { display: flex; gap: 8px; padding: 10px; padding-bottom: calc(10px + var(--sab)); border-top: 1px solid var(--line); flex: none; background: var(--panel); }
+      .chat-form input { flex: 1; border: 1px solid var(--line); background: var(--panel-2); color: var(--ink); border-radius: 12px; padding: 12px 13px; min-width: 0; min-height: 48px; }
+      .chat-form input:disabled { opacity: .55; }
+      .send-btn { border: none; background: var(--accent); color: #fff; border-radius: 12px; padding: 0 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; min-height: 48px; min-width: 48px; justify-content: center; }
+      .send-btn:disabled { opacity: .45; cursor: not-allowed; }
+      .send-btn svg { width: 17px; height: 17px; }
+      .toast { position: fixed; left: 50%; bottom: calc(22px + var(--sab)); transform: translateX(-50%) translateY(20px); background: #131a22; color: #fff; padding: 11px 18px; border-radius: 999px; font-weight: 700; font-size: .88rem; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; z-index: 50; max-width: 92vw; text-align: center; box-shadow: var(--shadow); }
+      .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+      /* ---------- Pie de página e información ---------- */
+      .site-footer { flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2px 6px; padding: 6px 12px calc(6px + var(--sab)); background: var(--panel); border-top: 1px solid var(--line); }
+      .site-footer .foot-note { font-size: .78rem; color: var(--ink-soft); font-weight: 600; margin-right: 6px; }
+      .foot-link { border: none; background: transparent; color: var(--accent); font-weight: 700; font-size: .8rem; padding: 8px 6px; min-height: 36px; border-radius: 8px; }
+      .foot-link:active { opacity: .6; }
+      .info-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(5, 8, 12, .6); display: none; align-items: center; justify-content: center; padding: 16px; }
+      .info-overlay.open { display: flex; }
+      .info-dialog { background: var(--panel); color: var(--ink); border-radius: 14px; width: 100%; max-width: 680px; max-height: 86dvh; max-height: 86vh; display: flex; flex-direction: column; box-shadow: var(--shadow); overflow: hidden; }
+      .info-head { display: flex; align-items: center; gap: 10px; padding: 15px 18px; border-bottom: 1px solid var(--line); flex: none; }
+      .info-head h2 { margin: 0; font-size: 1.08rem; font-weight: 800; letter-spacing: -.01em; flex: 1; }
+      .info-close { border: 1px solid var(--line); background: var(--panel-2); color: var(--ink); border-radius: 10px; padding: 9px 14px; font-weight: 800; font-size: .85rem; min-height: 40px; }
+      .info-body { padding: 16px 18px 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; font-size: .94rem; line-height: 1.6; }
+      .info-body h3 { margin: 18px 0 6px; font-size: 1rem; font-weight: 800; }
+      .info-body h3:first-child { margin-top: 0; }
+      .info-body p { margin: 0 0 10px; }
+      .info-body ul { margin: 0 0 10px; padding-left: 20px; }
+      .info-body li { margin-bottom: 5px; }
+      .info-body .updated { color: var(--ink-soft); font-size: .82rem; font-weight: 600; }
+
+      /* ---------- PC ancho ---------- */
+      @media (min-width: 1100px) { .layout { grid-template-columns: minmax(0,1fr) 380px; } }
+
+      /* ---------- Móvil / iPhone / Android ---------- */
+      @media (max-width: 820px) {
+        /* En celular la página se desplaza de arriba hacia abajo: todo se apila
+           (video, botones, anuncio, chat) y se llega a cada parte con scroll. */
+        html, body { height: auto; }
+        body { min-height: 100vh; min-height: 100dvh; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior-y: auto; }
+        .layout { display: flex; flex-direction: column; flex: none; }
+        .stage-wrap { flex: none; }
+        .stage { flex: none; height: 54vh; height: 54dvh; min-height: 300px; }
+        .chat { flex: none; height: 330px; }
+        .topbar { gap: 6px; padding-left: 10px; padding-right: 10px; }
+        .brand { font-size: .98rem; }
+        .service { display: none; }
+        .online { font-size: .8rem; padding: 6px 10px; }
+        .field { flex: 1 1 44%; min-width: 0; }
+        .field span.lbl { display: none; }
+        .field select { width: 100%; max-width: none; }
+        .chat { border-left: none; border-top: 1px solid var(--line); }
+        .chat-head { padding: 9px 12px; }
+        .messages { padding: 10px; }
+        #localVideo { width: 29%; max-width: 118px; right: 10px; bottom: 10px; }
+        .local-label { right: 10px; bottom: 10px; }
+        .partner-chip { max-width: calc(100% - 132px); font-size: .85rem; }
+        .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px; padding-bottom: calc(10px + var(--sab)); }
+        .controls .btn { padding: 11px 6px; font-size: .86rem; width: 100%; }
+        #startBtn, #nextBtn { grid-column: span 1; }
+        .status-text { grid-column: 1 / -1; margin: 0; text-align: center; font-size: .82rem; order: 99; }
+        .stage-msg { padding: 18px 16px; }
+        .stage-msg p { font-size: .92rem; }
+        .ad-wrap { padding: 5px 10px calc(6px + var(--sab)); }
+        .ad-slot { height: 50px; max-height: 50px !important; }
+        .ad-slot .adsbygoogle { height: 50px; max-height: 50px !important; }
+        .ad-slot iframe { max-height: 50px !important; }
+      }
+      @media (max-width: 820px) and (orientation: landscape) {
+        .stage { height: 74vh; height: 74dvh; min-height: 260px; }
+        .chat { height: 300px; }
+        .topbar { flex-wrap: wrap; }
+      }
+      @media (max-width: 380px) { .controls .btn { font-size: .8rem; gap: 5px; } .emoji-row button { min-width: 36px; } }
+      @media (prefers-reduced-motion: reduce) { .radar::before, .radar::after, .dot, .spinner { animation: none; } }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <span class="brand">One<b>TV</b></span>
+      <span class="online"><span class="dot wait" id="connDot"></span><span id="onlineCount">Conectando…</span></span>
+      <span class="service"><span class="dot wait" id="serviceDot"></span><span id="serviceText">Servicio: conectando…</span></span>
+      <button class="retry-btn" id="retryBtn" type="button">Reconectar</button>
+      <span class="spacer"></span>
+      <label class="field">
+        <span class="lbl">Mi país</span>
+        <select id="myCountry" aria-label="Mi país"></select>
+      </label>
+      <label class="field">
+        <span class="lbl">Quiero hablar con</span>
+        <select id="countryFilter" aria-label="Filtrar por país"></select>
+      </label>
+    </header>
+
+    <div class="layout">
+      <section class="stage-wrap">
+        <div class="stage" id="stage">
+          <video id="remoteVideo" autoplay playsinline webkit-playsinline></video>
+          <div class="partner-chip" id="partnerChip">
+            <span class="flag" id="partnerFlag">🌎</span>
+            <span id="partnerName">Extraño</span>
+            <span class="timer" id="callTimer">00:00</span>
+          </div>
+          <button class="report-btn" id="reportBtn" type="button">Reportar y saltar</button>
+          <button class="tap-play" id="tapPlayBtn" type="button">Toca para ver y escuchar a la otra persona</button>
+          <div class="stage-msg" id="stageMsg"></div>
+          <span class="local-label">Tú</span>
+          <video id="localVideo" autoplay playsinline webkit-playsinline muted></video>
+        </div>
+
+        <div class="controls">
+          <button class="btn primary" id="startBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3" fill="currentColor" stroke="none"/></svg>
+            Empezar
+          </button>
+          <button class="btn primary" id="nextBtn" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4" fill="currentColor" stroke="none"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+            Siguiente
+          </button>
+          <button class="btn danger" id="stopBtn" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+            Detener
+          </button>
+          <button class="btn toggle" id="micBtn" type="button" disabled aria-pressed="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            Micrófono
+          </button>
+          <button class="btn toggle" id="camBtn" type="button" disabled aria-pressed="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            Cámara
+          </button>
+          <button class="btn toggle" id="flipBtn" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
+            Girar cámara
+          </button>
+          <span class="status-text" id="statusText">Conectando al servicio de emparejamiento…</span>
+        </div>
+
+        <div class="ad-wrap">
+          <span class="ad-label">Publicidad</span>
+          <div class="ad-slot">
+            <ins class="adsbygoogle" style="display:block;width:100%;height:60px" data-ad-client="ca-pub-1021956217360765" data-ad-format="horizontal"></ins>
+          </div>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </section>
+
+      <aside class="chat" aria-label="Chat de texto">
+        <div class="chat-head">Chat <span class="typing" id="typingHint">la otra persona está escribiendo…</span></div>
+        <div class="messages" id="messages">
+          <div class="msg sys">Cuando te conectes con alguien, aquí pueden escribirse. Sé amable y respetuoso.</div>
+        </div>
+        <div class="emoji-row" id="emojiRow"></div>
+        <form class="chat-form" id="chatForm">
+          <input id="chatInput" type="text" maxlength="500" placeholder="Conéctate para poder escribir…" autocomplete="off" enterkeyhint="send" disabled />
+          <button class="send-btn" id="sendBtn" type="submit" disabled aria-label="Enviar mensaje">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <span>Enviar</span>
+          </button>
+        </form>
+      </aside>
+    </div>
+
+    <footer class="site-footer">
+      <span class="foot-note">© 2026 OneTV · Solo para mayores de 18 años</span>
+      <button class="foot-link" type="button" data-doc="doc-acerca">Qué es OneTV</button>
+      <button class="foot-link" type="button" data-doc="doc-reglas">Reglas de uso</button>
+      <button class="foot-link" type="button" data-doc="doc-faq">Preguntas frecuentes</button>
+      <button class="foot-link" type="button" data-doc="doc-privacidad">Política de privacidad</button>
+      <button class="foot-link" type="button" data-doc="doc-terminos">Términos de uso</button>
+    </footer>
+
+    <div class="info-overlay" id="infoOverlay" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+      <div class="info-dialog">
+        <div class="info-head">
+          <h2 id="infoTitle">Información</h2>
+          <button class="info-close" id="infoClose" type="button">Cerrar</button>
+        </div>
+        <div class="info-body" id="infoBody"></div>
+      </div>
+    </div>
+
+    <div id="legalDocs" hidden>
+      <section id="doc-acerca" data-title="Qué es OneTV">
+        <p><strong>OneTV</strong> es un videochat aleatorio y gratuito para conocer gente nueva de diferentes países. Al pulsar «Empezar», la página te empareja al azar con otra persona que esté conectada en ese momento, y pueden conversar por cámara, micrófono y chat de texto.</p>
+        <h3>Cómo funciona</h3>
+        <ul>
+          <li>No necesitas registrarte ni crear una cuenta: entras y pulsas «Empezar».</li>
+          <li>Puedes indicar tu país y, si quieres, filtrar para hablar solo con personas de un país concreto.</li>
+          <li>Con «Siguiente» pasas a otra persona al instante, y con «Detener» cierras la conversación cuando quieras.</li>
+          <li>La cámara y el micrófono solo se activan con tu permiso, y puedes apagarlos en cualquier momento con los botones de la pantalla.</li>
+          <li>Funciona en el navegador, sin instalar nada: en celular, iPhone y PC.</li>
+        </ul>
+        <h3>Para quién es</h3>
+        <p>OneTV es un servicio <strong>solo para personas mayores de 18 años</strong>. Sirve para practicar idiomas, conocer otras culturas y hacer nuevas amistades de forma casual. El video y el audio viajan directamente entre los dos dispositivos conectados, y la página cuenta con reglas de uso claras y un botón de «Reportar y saltar» para salir de cualquier conversación incómoda y bloquear a esa persona durante la sesión.</p>
+      </section>
+
+      <section id="doc-reglas" data-title="Reglas de uso">
+        <p>Estas reglas existen para que OneTV sea un espacio seguro y agradable para todos. Al usar el servicio aceptas cumplirlas.</p>
+        <ul>
+          <li><strong>Solo mayores de 18 años.</strong> Si eres menor de edad, no puedes usar OneTV.</li>
+          <li><strong>Prohibidos los desnudos y todo contenido sexual.</strong> No se permite mostrar el cuerpo desnudo, gestos sexuales ni pedir contenido sexual a la otra persona.</li>
+          <li><strong>Respeto entre usuarios.</strong> Nada de acoso, insultos, amenazas, discriminación ni discurso de odio.</li>
+          <li><strong>Cuida tus datos personales.</strong> No compartas tu dirección, teléfono, contraseñas ni datos bancarios, y no pidas los de la otra persona.</li>
+          <li><strong>No grabes ni difundas</strong> la imagen o la voz de otra persona sin su consentimiento.</li>
+          <li><strong>Nada de spam ni publicidad</strong> dentro de las conversaciones.</li>
+        </ul>
+        <h3>Botón de reportar</h3>
+        <p>Durante una conversación verás arriba a la derecha el botón <strong>«Reportar y saltar»</strong>. Al pulsarlo, la conversación se cierra al instante, esa persona queda bloqueada para ti durante el resto de la sesión y pasas a buscar a otra. Úsalo sin dudar ante cualquier conducta que incumpla estas reglas. También puedes pulsar «Siguiente» para cambiar de persona en cualquier momento, sin dar explicaciones.</p>
+      </section>
+
+      <section id="doc-faq" data-title="Preguntas frecuentes">
+        <h3>¿OneTV es gratis?</h3>
+        <p>Sí. El videochat es completamente gratuito y sin registro.</p>
+        <h3>¿Necesito crear una cuenta?</h3>
+        <p>No. No pedimos nombre, correo ni contraseña. Solo eliges tu país, pulsas «Empezar» y permites el acceso a tu cámara y micrófono.</p>
+        <h3>¿Por qué a veces no encuentro a nadie?</h3>
+        <p>El emparejamiento depende de cuántas personas estén conectadas en ese momento y del filtro de país que tengas activo. Si tardas en conectar, deja la búsqueda abierta con el filtro en «Todos los países»: en cuanto entre alguien, te conectamos.</p>
+        <h3>¿Se graban mis conversaciones?</h3>
+        <p>No. El video, el audio y los mensajes viajan directamente entre tu dispositivo y el de la otra persona. OneTV no graba ni guarda tus conversaciones.</p>
+        <h3>¿Cómo reporto a una persona?</h3>
+        <p>Con el botón «Reportar y saltar» que aparece durante la conversación: cierra el chat al instante y bloquea a esa persona durante tu sesión. En las Reglas de uso tienes el detalle completo.</p>
+        <h3>¿Funciona en iPhone?</h3>
+        <p>Sí, funciona en Safari y Chrome en iPhone, en Android y en PC. Si la cámara no se abre, revisa que el navegador tenga permiso de cámara y micrófono.</p>
+        <h3>¿Puedo elegir con qué país hablar?</h3>
+        <p>Sí. En la parte de arriba tienes el selector «Quiero hablar con» para filtrar por país, o dejarlo en «Todos los países».</p>
+      </section>
+
+      <section id="doc-privacidad" data-title="Política de privacidad">
+        <p class="updated">Última actualización: 28 de octubre de 2026</p>
+        <h3>Datos que no pedimos</h3>
+        <p>OneTV funciona sin cuentas ni registro. No te pedimos nombre, correo electrónico, teléfono ni contraseña, y no creamos perfiles de usuario.</p>
+        <h3>Cámara, micrófono y conversaciones</h3>
+        <p>La cámara y el micrófono se activan únicamente con tu permiso. El video, el audio y los mensajes del chat viajan <strong>directamente entre tu dispositivo y el de la otra persona</strong> mediante tecnología WebRTC (conexión punto a punto). OneTV no graba, no escucha ni almacena el contenido de tus conversaciones.</p>
+        <h3>Datos técnicos de conexión</h3>
+        <p>Para emparejar a dos personas, la página intercambia datos técnicos mínimos (por ejemplo, que estás en línea, el país que elegiste y la información necesaria para establecer la conexión) a través de un servicio de mensajería en tiempo real. Esos datos se usan solo para conectar la conversación y no se guardan como historial.</p>
+        <h3>Publicidad y cookies de Google</h3>
+        <p>Esta página muestra anuncios de <strong>Google AdSense</strong>. Google y sus socios pueden usar cookies para mostrarte anuncios basados en tus visitas a esta y otras páginas, y para medir su rendimiento. Puedes desactivar la publicidad personalizada desde la configuración de anuncios de tu cuenta de Google. Al usar OneTV aceptas el uso de estas cookies publicitarias; si no estás de acuerdo, puedes abandonar la página.</p>
+        <h3>Menores de edad</h3>
+        <p>OneTV está dirigido exclusivamente a personas mayores de 18 años y no está pensado para menores.</p>
+        <h3>Cambios en esta política</h3>
+        <p>Si esta política cambia, la versión nueva se publicará en esta misma sección con su fecha de actualización.</p>
+      </section>
+
+      <section id="doc-terminos" data-title="Términos de uso">
+        <p class="updated">Última actualización: 28 de octubre de 2026</p>
+        <h3>El servicio</h3>
+        <p>OneTV es un servicio gratuito de videochat aleatorio que conecta a dos personas desconocidas por cámara, audio y chat de texto. Se ofrece «tal cual», sin garantía de disponibilidad continua: el emparejamiento depende de que haya otras personas conectadas en ese momento.</p>
+        <h3>Edad mínima</h3>
+        <p>Para usar OneTV debes tener <strong>18 años o más</strong>. Al pulsar «Empezar» confirmas que cumples este requisito.</p>
+        <h3>Tu responsabilidad</h3>
+        <ul>
+          <li>Eres responsable de tu conducta y de lo que muestres o digas durante las conversaciones.</li>
+          <li>Debes cumplir las Reglas de uso de esta página, que forman parte de estos términos.</li>
+          <li>La otra persona es un desconocido: no compartas datos personales ni aceptes propuestas fuera de la página.</li>
+        </ul>
+        <h3>Contenido de otros usuarios</h3>
+        <p>Las conversaciones ocurren en directo entre usuarios y OneTV no puede revisarlas antes de que sucedan. Si alguien incumple las reglas, usa el botón «Reportar y saltar» para cerrar la conversación y bloquear a esa persona durante tu sesión.</p>
+        <h3>Publicidad</h3>
+        <p>La página se mantiene gratuita gracias a los anuncios de Google AdSense que se muestran fuera del área de video y del chat.</p>
+        <h3>Cambios en los términos</h3>
+        <p>Estos términos pueden actualizarse; la versión vigente será siempre la publicada en esta sección.</p>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script>
+      "use strict";
+      /* OneTV — Señalización por MQTT sobre WebSocket seguro (WSS) + WebRTC P2P.
+         Funciona en PC, Android e iPhone (Safari/Chrome) sin servidor propio. */
+
+      var MQTT_SRCS = [
+        "https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js",
+        "https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js"
+      ];
+      var BROKERS = [
+        "wss://broker.emqx.io:8084/mqtt",
+        "wss://broker.hivemq.com:8884/mqtt",
+        "wss://test.mosquitto.org:8081/mqtt",
+        "wss://mqtt.eclipseprojects.io:443/mqtt"
+      ];
+      var PREFIX = "vchataleatorio/v1"; /* mismo canal que la versión anterior: los usuarios antiguos y nuevos se encuentran */
+      var ICE_SERVERS = [
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: "stun:stun1.l.google.com:19302" },
+        { urls: "stun:stun.cloudflare.com:3478" },
+        { urls: "stun:stun2.l.google.com:19302" },
+        { urls: "turn:openrelay.metered.ca:80", username: "openrelayproject", credential: "openrelayproject" },
+        { urls: "turn:openrelay.metered.ca:443", username: "openrelayproject", credential: "openrelayproject" },
+        { urls: "turn:openrelay.metered.ca:443?transport=tcp", username: "openrelayproject", credential: "openrelayproject" }
+      ];
+
+      var COUNTRIES = [
+        ["DO","República Dominicana"],["MX","México"],["CO","Colombia"],["AR","Argentina"],["ES","España"],["US","Estados Unidos"],["PE","Perú"],["CL","Chile"],["VE","Venezuela"],["EC","Ecuador"],["GT","Guatemala"],["CU","Cuba"],["BO","Bolivia"],["PY","Paraguay"],["HN","Honduras"],["SV","El Salvador"],["NI","Nicaragua"],["CR","Costa Rica"],["PA","Panamá"],["UY","Uruguay"],["PR","Puerto Rico"],["BR","Brasil"],["PT","Portugal"],["FR","Francia"],["IT","Italia"],["DE","Alemania"],["GB","Reino Unido"],["CA","Canadá"],["JP","Japón"],["KR","Corea del Sur"],["IN","India"],["PH","Filipinas"],["ID","Indonesia"],["TR","Turquía"],["EG","Egipto"],["MA","Marruecos"],["NG","Nigeria"],["ZA","Sudáfrica"],["AU","Australia"],["RU","Rusia"],["UA","Ucrania"],["PL","Polonia"],["NL","Países Bajos"],["SE","Suecia"],["XX","Otro país"]
+      ];
+      function flagOf(code){ if(!code||code==="XX") return "🌎"; return String.fromCodePoint.apply(null, code.split("").map(function(c){return 127397+c.charCodeAt(0);})); }
+      function countryName(code){ for(var i=0;i<COUNTRIES.length;i++) if(COUNTRIES[i][0]===code) return COUNTRIES[i][1]; return "Otro país"; }
+
+      var myId = "u" + Math.random().toString(36).slice(2,10) + Date.now().toString(36);
+      var state = "idle";
+      var client = null, brokerIdx = 0, brokerTries = 0, serviceConnected = false;
+      var peers = new Map(), blocked = new Set(), cooldown = new Map();
+      var localStream = null, session = null, pendingOffer = null;
+      var presenceTimer = null, sweepTimer = null, reconnectTimer = null;
+      var micOn = true, camOn = true, facingMode = "user";
+      var typingTimeout = null, lastTypingSent = 0;
+
+      var $ = function(id){ return document.getElementById(id); };
+      var stage = $("stage"), stageMsg = $("stageMsg");
+      var remoteVideo = $("remoteVideo"), localVideo = $("localVideo");
+      var startBtn = $("startBtn"), nextBtn = $("nextBtn"), stopBtn = $("stopBtn");
+      var micBtn = $("micBtn"), camBtn = $("camBtn"), flipBtn = $("flipBtn");
+      var statusText = $("statusText"), onlineCount = $("onlineCount");
+      var messagesEl = $("messages"), chatInput = $("chatInput"), sendBtn = $("sendBtn");
+      var typingHint = $("typingHint"), callTimer = $("callTimer");
+      var retryBtn = $("retryBtn"), tapPlayBtn = $("tapPlayBtn");
+
+      function toast(text){ var t=$("toast"); t.textContent=text; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(function(){t.classList.remove("show");},3400); }
+      function setStatus(text){ statusText.textContent = text; }
+      function setDot(el, mode){ el.classList.remove("wait","off"); if(mode) el.classList.add(mode); }
+      function setService(ok, text){
+        serviceConnected = ok;
+        setDot($("connDot"), ok ? "" : (text && text.indexOf("Sin")===0 ? "off" : "wait"));
+        setDot($("serviceDot"), ok ? "" : (text && text.indexOf("Sin")===0 ? "off" : "wait"));
+        $("serviceText").textContent = "Servicio: " + text;
+        retryBtn.classList.toggle("show", !ok);
+        if (ok && state==="idle") setStatus("Servicio conectado. Listo para empezar");
+        if (!ok) onlineCount.textContent = text;
+      }
+      function showStageMsg(html){ stageMsg.innerHTML=html; stageMsg.style.display="flex"; }
+      function hideStageMsg(){ stageMsg.style.display="none"; }
+      function idleMsg(){ showStageMsg("<h1>Conoce gente nueva de todo el mundo</h1><p>Pulsa <strong>Empezar</strong> y OneTV te empareja al azar con otra persona conectada ahora mismo: por cámara, audio y chat.</p><p class='hint' id='svcHint'>"+(serviceConnected?"✅ Servicio de emparejamiento conectado":"⏳ Conectando al servicio de emparejamiento… dale unos segundos y pulsa Empezar.")+"</p><p class='rules'>Funciona en celular, iPhone y PC. Sé respetuoso, no compartas datos personales y usa «Siguiente» para cambiar de persona. Si estás solo, deja la búsqueda abierta: en cuanto entre alguien, te conectamos.</p>"); }
+      function searchingMsg(){ showStageMsg("<div class='radar'><div class='core'><svg width='26' height='26' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='7'/><line x1='21' y1='21' x2='16.5' y2='16.5'/></svg></div></div><h1>Buscando a alguien…</h1><p>Estamos mirando quién está conectado ahora mismo"+(filtroActual()!=="todos"?" en "+countryName(filtroActual()):" en cualquier país")+". En cuanto haya una persona disponible, la verás aquí.</p>"); }
+      function connectingMsg(){ showStageMsg("<div class='spinner'></div><h1>Conectando…</h1><p>Estableciendo la cámara y el audio con la otra persona.</p>"); }
+      function errorMsg(title,text){ showStageMsg("<h1>"+title+"</h1><p>"+text+"</p>"); }
+      function addMsg(text,who){ var d=document.createElement("div"); d.className="msg "+who; d.textContent=text; messagesEl.appendChild(d); messagesEl.scrollTop=messagesEl.scrollHeight; }
+      function addSys(text){ addMsg(text,"sys"); }
+      function clearChat(){ messagesEl.innerHTML=""; addSys("Cuando te conectes con alguien, aquí pueden escribirse. Sé amable y respetuoso."); }
+
+      var myCountrySel = $("myCountry"), filterSel = $("countryFilter");
+      (function fillCountries(){
+        COUNTRIES.forEach(function(c){
+          var o1=document.createElement("option"); o1.value=c[0]; o1.textContent=flagOf(c[0])+" "+c[1]; myCountrySel.appendChild(o1);
+          var o2=document.createElement("option"); o2.value=c[0]; o2.textContent=flagOf(c[0])+" "+c[1]; filterSel.appendChild(o2);
+        });
+        var all=document.createElement("option"); all.value="todos"; all.textContent="🌎 Todos los países"; filterSel.insertBefore(all, filterSel.firstChild); filterSel.value="todos"; myCountrySel.value="DO";
+      })();
+      function miPais(){ return myCountrySel.value; }
+      function filtroActual(){ return filterSel.value; }
+      myCountrySel.addEventListener("change", publishPresence);
+      filterSel.addEventListener("change", function(){ publishPresence(); if(state==="searching") searchingMsg(); });
+
+      (function emojis(){
+        var list=["👋","😂","😊","❤️","🔥","👍","🎵","😮"]; var row=$("emojiRow");
+        list.forEach(function(e){ var b=document.createElement("button"); b.type="button"; b.textContent=e; b.setAttribute("aria-label","Emoji "+e); b.addEventListener("click",function(){ chatInput.value+=e; chatInput.focus(); }); row.appendChild(b); });
+      })();
+
+      /* ---------- Carga de la librería MQTT con respaldos ---------- */
+      function loadMqtt(idx, done){
+        if (typeof window.mqtt !== "undefined") { done(true); return; }
+        if (idx >= MQTT_SRCS.length) { done(false); return; }
+        var s=document.createElement("script"); s.src=MQTT_SRCS[idx]; s.async=true;
+        s.onload=function(){ done(typeof window.mqtt!=="undefined"); };
+        s.onerror=function(){ loadMqtt(idx+1, done); };
+        document.head.appendChild(s);
+      }
+
+      /* ---------- Conexión al servicio de emparejamiento ---------- */
+      function connectBroker(){
+        if (typeof window.mqtt === "undefined") {
+          setService(false, "Sin conexión");
+          errorMsg("No se pudo cargar el servicio de emparejamiento","Revisa tu conexión a internet y pulsa Reconectar.");
+          return;
+        }
+        var url = BROKERS[brokerIdx % BROKERS.length];
+        setService(false, "conectando…");
+        try {
+          client = window.mqtt.connect(url, { clientId: "onetv_"+myId, clean: true, connectTimeout: 9000, reconnectPeriod: 0, keepalive: 30,
+            will: { topic: PREFIX+"/presencia/"+myId, payload: JSON.stringify({id:myId, fuera:true}), qos: 0, retain: false } });
+        } catch(e){ tryNextBroker(); return; }
+        var opened=false, failed=false;
+        var openTimeout=setTimeout(function(){ if(!opened && !failed){ failed=true; tryNextBroker(); } }, 10000);
+        client.on("connect", function(){
+          opened=true; clearTimeout(openTimeout); brokerTries=0;
+          setService(true, "conectado");
+          client.subscribe([PREFIX+"/presencia/+", PREFIX+"/senal/"+myId], function(err){
+            if(!err){ publishPresence(); if(!presenceTimer) presenceTimer=setInterval(publishPresence,4000); if(!sweepTimer) sweepTimer=setInterval(sweepPeers,2000); updateOnline(); idleRefreshHint(); }
+          });
+        });
+        client.on("message", onMqttMessage);
+        client.on("error", function(){ if(!opened && !failed){ failed=true; clearTimeout(openTimeout); tryNextBroker(); } });
+        client.on("close", function(){
+          if (opened) { setService(false, "reconectar…"); scheduleReconnect(); }
+          else if(!failed){ failed=true; clearTimeout(openTimeout); tryNextBroker(); }
+        });
+        client.on("offline", function(){ setService(false, "conectando…"); });
+      }
+      function idleRefreshHint(){ if(state==="idle") idleMsg(); }
+      function scheduleReconnect(){ clearTimeout(reconnectTimer); reconnectTimer=setTimeout(function(){ brokerIdx++; connectBroker(); }, 1800); }
+      function tryNextBroker(){
+        brokerTries++;
+        if (brokerTries > BROKERS.length*2) { setService(false, "Sin conexión"); setStatus("Sin conexión al servicio. Pulsa Reconectar."); return; }
+        brokerIdx++;
+        if (client){ try{ client.end(true); }catch(e){} client=null; }
+        setTimeout(connectBroker, 500);
+      }
+      retryBtn.addEventListener("click", function(){ brokerTries=0; if(client){try{client.end(true);}catch(e){} client=null;} toast("Reconectando al servicio de emparejamiento…"); connectBroker(); });
+
+      function publishPresence(){ if(!client||!client.connected) return; var estado= state==="searching"?"buscando":(state==="connected"?"conectado":"inactivo"); client.publish(PREFIX+"/presencia/"+myId, JSON.stringify({id:myId, pais:miPais(), filtro:filtroActual(), estado:estado, ts:Date.now()})); }
+      function sweepPeers(){ var now=Date.now(), changed=false; peers.forEach(function(p,id){ if(now-p.lastSeen>11000){ peers.delete(id); changed=true; if(session&&session.peerId===id&&state==="connected") partnerLeft("La otra persona salió del chat."); } }); cooldown.forEach(function(until,id){ if(until<now) cooldown.delete(id); }); if(changed) updateOnline(); }
+      function updateOnline(){ if(!serviceConnected) return; var n=peers.size+1; onlineCount.textContent = n===1 ? "1 persona en línea (tú)" : n+" personas en línea"; }
+      function sendSignal(toId,obj){ if(!client||!client.connected) return; obj.de=myId; try{ client.publish(PREFIX+"/senal/"+toId, JSON.stringify(obj)); }catch(e){} }
+      function onMqttMessage(topic,payload){ var msg; try{ msg=JSON.parse(payload.toString()); }catch(e){ return; } if(topic.indexOf(PREFIX+"/presencia/")===0){ if(!msg.id||msg.id===myId) return; if(msg.fuera){ peers.delete(msg.id); updateOnline(); return; } peers.set(msg.id,{pais:msg.pais,filtro:msg.filtro,estado:msg.estado,lastSeen:Date.now()}); updateOnline(); maybeMatch(); return; } if(topic===PREFIX+"/senal/"+myId) handleSignal(msg); }
+
+      function matchable(p,id){ if(p.estado!=="buscando") return false; if(blocked.has(id)) return false; var cd=cooldown.get(id); if(cd&&cd>Date.now()) return false; if(filtroActual()!=="todos"&&p.pais!==filtroActual()) return false; if(p.filtro&&p.filtro!=="todos"&&p.filtro!==miPais()) return false; return true; }
+      function maybeMatch(){ if(state!=="searching"||session||pendingOffer||!serviceConnected) return; var c=[]; peers.forEach(function(p,id){ if(matchable(p,id)) c.push(id); }); if(!c.length) return; startOffer(c[Math.floor(Math.random()*c.length)]); }
+      function startOffer(peerId){
+        var sessionId=myId+"-"+Date.now().toString(36); var s=createSession(sessionId,peerId,true); session=s; setChatEnabled(false); connectingMsg(); setStatus("Conectando con alguien de "+countryName((peers.get(peerId)||{}).pais)+"…");
+        pendingOffer={to:peerId, sessionId:sessionId, timeoutId:setTimeout(function(){ if(pendingOffer&&pendingOffer.sessionId===sessionId){ pendingOffer=null; cooldown.set(peerId,Date.now()+12000); teardownSession(false); if(state==="searching"){ searchingMsg(); setStatus("Buscando personas en línea…"); maybeMatch(); } } }, 12000)};
+        s.pc.createOffer().then(function(o){ return s.pc.setLocalDescription(o); }).then(function(){ sendSignal(peerId,{tipo:"oferta",sesion:sessionId,sdp:s.pc.localDescription}); }).catch(function(){ if(pendingOffer){clearTimeout(pendingOffer.timeoutId); pendingOffer=null;} teardownSession(false); if(state==="searching") searchingMsg(); });
+      }
+      function handleSignal(msg){
+        if(!msg||!msg.de) return;
+        if(msg.tipo==="oferta") onRemoteOffer(msg);
+        else if(msg.tipo==="respuesta"){ if(session&&session.id===msg.sesion&&session.peerId===msg.de){ if(pendingOffer){clearTimeout(pendingOffer.timeoutId); pendingOffer=null;} session.pc.setRemoteDescription(new RTCSessionDescription(msg.sdp)).then(function(){ flushIce(session); }).catch(function(){}); } }
+        else if(msg.tipo==="ice"){ if(session&&session.id===msg.sesion&&session.peerId===msg.de&&msg.candidato){ if(session.pc.remoteDescription){ session.pc.addIceCandidate(new RTCIceCandidate(msg.candidato)).catch(function(){}); } else session.iceQueue.push(msg.candidato); } }
+        else if(msg.tipo==="ocupado"){ if(pendingOffer&&pendingOffer.sessionId===msg.sesion){ clearTimeout(pendingOffer.timeoutId); pendingOffer=null; cooldown.set(msg.de,Date.now()+6000); teardownSession(false); if(state==="searching"){ searchingMsg(); maybeMatch(); } } }
+        else if(msg.tipo==="adios"){ if(session&&session.peerId===msg.de&&session.id===msg.sesion) partnerLeft("La otra persona pasó a la siguiente."); }
+      }
+      function onRemoteOffer(msg){
+        if(state!=="searching"||session||pendingOffer||blocked.has(msg.de)){ sendSignal(msg.de,{tipo:"ocupado",sesion:msg.sesion}); return; }
+        var p=peers.get(msg.de);
+        if(p){ if(filtroActual()!=="todos"&&p.pais!==filtroActual()){ sendSignal(msg.de,{tipo:"ocupado",sesion:msg.sesion}); return; } if(p.filtro&&p.filtro!=="todos"&&p.filtro!==miPais()){ sendSignal(msg.de,{tipo:"ocupado",sesion:msg.sesion}); return; } }
+        var s=createSession(msg.sesion,msg.de,false); session=s; connectingMsg();
+        s.pc.setRemoteDescription(new RTCSessionDescription(msg.sdp)).then(function(){ flushIce(s); return s.pc.createAnswer(); }).then(function(a){ return s.pc.setLocalDescription(a); }).then(function(){ sendSignal(msg.de,{tipo:"respuesta",sesion:msg.sesion,sdp:s.pc.localDescription}); }).catch(function(){ teardownSession(false); if(state==="searching") searchingMsg(); });
+      }
+      function flushIce(s){ s.iceQueue.forEach(function(c){ s.pc.addIceCandidate(new RTCIceCandidate(c)).catch(function(){}); }); s.iceQueue=[]; }
+
+      function createSession(sessionId, peerId, isCaller){
+        var pc=new RTCPeerConnection({iceServers: ICE_SERVERS, iceCandidatePoolSize: 4});
+        var s={id:sessionId, peerId:peerId, pc:pc, dc:null, iceQueue:[], startedAt:null, timerInt:null};
+        if(localStream) localStream.getTracks().forEach(function(t){ try{ pc.addTrack(t, localStream); }catch(e){} });
+        pc.onicecandidate=function(ev){ if(ev.candidate) sendSignal(peerId,{tipo:"ice",sesion:sessionId,candidato:ev.candidate.toJSON()}); };
+        pc.ontrack=function(ev){
+          if(ev.streams&&ev.streams[0]) remoteVideo.srcObject=ev.streams[0];
+          else { if(!remoteVideo.srcObject) remoteVideo.srcObject=new MediaStream(); remoteVideo.srcObject.addTrack(ev.track); }
+          stage.classList.add("has-remote"); hideStageMsg();
+          tryPlayRemote();
+        };
+        pc.onconnectionstatechange=function(){ if(!session||session.id!==sessionId) return; if(pc.connectionState==="connected") onConnected(s); if(pc.connectionState==="failed"||pc.connectionState==="closed") partnerLeft("Se perdió la conexión con la otra persona."); };
+        pc.oniceconnectionstatechange=function(){ if(!session||session.id!==sessionId) return; if(pc.iceConnectionState==="connected"||pc.iceConnectionState==="completed") onConnected(s); if(pc.iceConnectionState==="disconnected"){ setTimeout(function(){ if(session&&session.id===sessionId&&(pc.iceConnectionState==="disconnected"||pc.iceConnectionState==="failed")) partnerLeft("Se perdió la conexión con la otra persona."); },5000); } };
+        if(isCaller){ s.dc=pc.createDataChannel("chat"); wireDataChannel(s,s.dc); } else { pc.ondatachannel=function(ev){ s.dc=ev.channel; wireDataChannel(s,s.dc); }; }
+        return s;
+      }
+      function tryPlayRemote(){
+        var p = remoteVideo.play();
+        if(p && p.catch) p.catch(function(){ tapPlayBtn.classList.add("show"); });
+      }
+      tapPlayBtn.addEventListener("click", function(){ tapPlayBtn.classList.remove("show"); tryPlayRemote(); });
+      function wireDataChannel(s,dc){
+        dc.onopen=function(){ if(session&&session.id===s.id) setChatEnabled(true); };
+        dc.onclose=function(){ if(session&&session.id===s.id) setChatEnabled(false); };
+        dc.onmessage=function(ev){ var m; try{ m=JSON.parse(ev.data); }catch(e){ return; } if(m.tipo==="chat"){ hideTyping(); addMsg(m.texto,"them"); } else if(m.tipo==="escribiendo"){ showTyping(); } else if(m.tipo==="adios"){ partnerLeft("La otra persona pasó a la siguiente."); } };
+      }
+      function onConnected(s){
+        if(state==="connected"&&session&&session.id===s.id&&s.startedAt) return;
+        state="connected"; publishPresence(); hideStageMsg(); stage.classList.add("connected"); tryPlayRemote();
+        var p=peers.get(s.peerId); var pais=p?p.pais:"XX";
+        $("partnerFlag").textContent=flagOf(pais); $("partnerName").textContent=countryName(pais);
+        s.startedAt=Date.now(); callTimer.textContent="00:00"; clearInterval(s.timerInt);
+        s.timerInt=setInterval(function(){ var sec=Math.floor((Date.now()-s.startedAt)/1000); callTimer.textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0"); },1000);
+        setStatus("Conectado con alguien de "+countryName(pais)); addSys("Estás hablando con alguien de "+countryName(pais)+". ¡Saluda!"); nextBtn.disabled=false;
+        if(s.dc&&s.dc.readyState==="open") setChatEnabled(true);
+      }
+      function teardownSession(notify){
+        if(!session) return; var s=session; session=null;
+        if(notify){ try{ if(s.dc&&s.dc.readyState==="open") s.dc.send(JSON.stringify({tipo:"adios"})); }catch(e){} sendSignal(s.peerId,{tipo:"adios",sesion:s.id}); }
+        clearInterval(s.timerInt); try{ if(s.dc) s.dc.close(); }catch(e){} try{ s.pc.close(); }catch(e){}
+        remoteVideo.srcObject=null; stage.classList.remove("connected"); stage.classList.remove("has-remote"); tapPlayBtn.classList.remove("show"); setChatEnabled(false); hideTyping();
+      }
+      function partnerLeft(text){
+        if(state!=="connected"&&!session) return; var was=state==="connected"; teardownSession(false);
+        if(pendingOffer){ clearTimeout(pendingOffer.timeoutId); pendingOffer=null; }
+        if(was) addSys(text);
+        if(state==="connected"||state==="searching"){ state="searching"; publishPresence(); searchingMsg(); setStatus("Buscando personas en línea…"); nextBtn.disabled=true; setTimeout(maybeMatch,400); }
+      }
+      function setChatEnabled(on){ chatInput.disabled=!on; sendBtn.disabled=!on; chatInput.placeholder= on?"Escribe un mensaje…":"Conéctate para poder escribir…"; }
+      function showTyping(){ typingHint.style.display="block"; clearTimeout(typingTimeout); typingTimeout=setTimeout(hideTyping,2600); }
+      function hideTyping(){ typingHint.style.display="none"; }
+
+      /* ---------- Cámara y micrófono (PC + móvil + iPhone) ---------- */
+      function gum(constraints){ return navigator.mediaDevices.getUserMedia(constraints); }
+      function ensureLocalStream(){
+        if(localStream && localStream.getTracks().some(function(t){return t.readyState==="live";})) return Promise.resolve(localStream);
+        if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) return Promise.reject(new Error("sin-camara"));
+        var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent||"");
+        var videoC = isMobile ? { facingMode: facingMode, width:{ideal:720}, height:{ideal:1280} } : { facingMode: facingMode, width:{ideal:1280}, height:{ideal:720} };
+        return gum({ video: videoC, audio:{ echoCancellation:true, noiseSuppression:true, autoGainControl:true } }).then(function(stream){
+          localStream=stream; localVideo.srcObject=stream; localVideo.classList.toggle("back", facingMode==="environment");
+          var lp=localVideo.play(); if(lp&&lp.catch) lp.catch(function(){});
+          stage.classList.add("has-local"); micBtn.disabled=false; camBtn.disabled=false; flipBtn.disabled=false; applyToggles(); return stream;
+        }).catch(function(err){
+          if(err&&(err.name==="NotAllowedError"||err.name==="NotFoundError"||err.name==="OverconstrainedError"||err.name==="NotReadableError")){
+            return gum({audio:true}).then(function(stream){ localStream=stream; stage.classList.remove("has-local"); localVideo.srcObject=null; micBtn.disabled=false; camBtn.disabled=true; flipBtn.disabled=true; toast("Sin cámara: estás en modo solo audio."); return stream; });
+          }
+          throw err;
+        });
+      }
+      function applyToggles(){ if(!localStream) return; localStream.getAudioTracks().forEach(function(t){t.enabled=micOn;}); localStream.getVideoTracks().forEach(function(t){t.enabled=camOn;}); localVideo.style.opacity=camOn?"1":"0.25"; }
+      micBtn.addEventListener("click", function(){ micOn=!micOn; micBtn.classList.toggle("off",!micOn); micBtn.setAttribute("aria-pressed",String(micOn)); applyToggles(); });
+      camBtn.addEventListener("click", function(){ camOn=!camOn; camBtn.classList.toggle("off",!camOn); camBtn.setAttribute("aria-pressed",String(camOn)); applyToggles(); });
+      flipBtn.addEventListener("click", function(){
+        if(!localStream) return;
+        facingMode = facingMode==="user" ? "environment" : "user";
+        gum({ video:{ facingMode:{exact:facingMode} }, audio:false }).then(function(stream){
+          var newTrack=stream.getVideoTracks()[0]; if(!newTrack) return;
+          var oldTrack=localStream.getVideoTracks()[0];
+          if(session&&session.pc){ var sender=session.pc.getSenders().filter(function(x){return x.track&&x.track.kind==="video";})[0]; if(sender) sender.replaceTrack(newTrack).catch(function(){}); }
+          if(oldTrack){ localStream.removeTrack(oldTrack); try{oldTrack.stop();}catch(e){} }
+          localStream.addTrack(newTrack); localVideo.srcObject=localStream; localVideo.classList.toggle("back", facingMode==="environment"); newTrack.enabled=camOn;
+          toast(facingMode==="environment" ? "Cámara trasera" : "Cámara frontal");
+        }).catch(function(){ toast("Este dispositivo no tiene otra cámara."); facingMode = facingMode==="user" ? "environment" : "user"; });
+      });
+
+      function startSearch(){
+        if(!serviceConnected){ toast("Todavía conectando al servicio… espera unos segundos o pulsa Reconectar."); }
+        ensureLocalStream().then(function(){
+          state="searching"; publishPresence(); startBtn.disabled=true; nextBtn.disabled=true; stopBtn.disabled=false; searchingMsg(); setStatus(serviceConnected?"Buscando personas en línea…":"Buscando… (conectando al servicio)"); clearChat(); maybeMatch();
+        }).catch(function(){ errorMsg("No pudimos abrir tu cámara ni tu micrófono","El navegador necesita permiso. En iPhone: Ajustes o el icono en la barra de Safari → permite cámara y micrófono. En PC: pulsa el candado en la barra de direcciones y permite ambos, luego pulsa Empezar de nuevo."); setStatus("Falta el permiso de cámara/micrófono"); });
+      }
+      function stopAll(){ if(pendingOffer){clearTimeout(pendingOffer.timeoutId); pendingOffer=null;} teardownSession(true); state="idle"; publishPresence(); startBtn.disabled=false; nextBtn.disabled=true; stopBtn.disabled=true; idleMsg(); setStatus(serviceConnected?"Servicio conectado. Listo para empezar":"Listo para empezar"); addSys("Detuviste el chat. Pulsa Empezar cuando quieras volver."); }
+      startBtn.addEventListener("click", startSearch);
+      stopBtn.addEventListener("click", stopAll);
+      nextBtn.addEventListener("click", function(){ if(pendingOffer){clearTimeout(pendingOffer.timeoutId); pendingOffer=null;} teardownSession(true); state="searching"; publishPresence(); nextBtn.disabled=true; searchingMsg(); setStatus("Buscando a otra persona…"); clearChat(); setTimeout(maybeMatch,350); });
+      $("reportBtn").addEventListener("click", function(){ if(!session) return; blocked.add(session.peerId); toast("Persona reportada y bloqueada en esta sesión. Buscando a otra…"); nextBtn.click(); });
+
+      $("chatForm").addEventListener("submit", function(ev){ ev.preventDefault(); var text=chatInput.value.trim(); if(!text||!session||!session.dc||session.dc.readyState!=="open") return; session.dc.send(JSON.stringify({tipo:"chat",texto:text})); addMsg(text,"me"); chatInput.value=""; });
+      chatInput.addEventListener("input", function(){ var now=Date.now(); if(now-lastTypingSent<1800) return; lastTypingSent=now; if(session&&session.dc&&session.dc.readyState==="open"){ try{ session.dc.send(JSON.stringify({tipo:"escribiendo"})); }catch(e){} } });
+
+      document.addEventListener("visibilitychange", function(){ if(!document.hidden) publishPresence(); });
+      window.addEventListener("online", function(){ if(!serviceConnected){ brokerTries=0; connectBroker(); } publishPresence(); });
+      window.addEventListener("beforeunload", function(){ if(session) sendSignal(session.peerId,{tipo:"adios",sesion:session.id}); publishPresence(); });
+
+      /* ---------- Arranque ---------- */
+      idleMsg();
+      setService(false, "conectando…");
+      loadMqtt(0, function(ok){
+        if(!ok){ setService(false, "Sin conexión"); errorMsg("No se pudo cargar el servicio de emparejamiento","Revisa tu conexión a internet y pulsa Reconectar en la parte de arriba."); return; }
+        connectBroker();
+      });
+    </script>
+    <script>
+      /* Panel de información del pie de página: qué es OneTV, reglas, FAQ, privacidad y términos.
+         Solo muestra u oculta texto; no interviene en el emparejamiento, la cámara ni el chat. */
+      (function(){
+        var overlay = document.getElementById("infoOverlay");
+        var titleEl = document.getElementById("infoTitle");
+        var bodyEl = document.getElementById("infoBody");
+        function openDoc(id){
+          var doc = document.getElementById(id);
+          if(!doc) return;
+          titleEl.textContent = doc.getAttribute("data-title") || "Información";
+          bodyEl.innerHTML = doc.innerHTML;
+          bodyEl.scrollTop = 0;
+          overlay.classList.add("open");
+        }
+        function closeDoc(){ overlay.classList.remove("open"); }
+        var links = document.querySelectorAll(".foot-link[data-doc]");
+        for (var i = 0; i < links.length; i++) {
+          (function(btn){ btn.addEventListener("click", function(){ openDoc(btn.getAttribute("data-doc")); }); })(links[i]);
+        }
+        document.getElementById("infoClose").addEventListener("click", closeDoc);
+        overlay.addEventListener("click", function(ev){ if(ev.target === overlay) closeDoc(); });
+        document.addEventListener("keydown", function(ev){ if(ev.key === "Escape") closeDoc(); });
+      })();
+    </script>
+  </body>
+</html>
